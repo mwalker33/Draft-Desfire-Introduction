@@ -169,10 +169,10 @@ For this example we will use an AID of 123456 (my first App, but does not need t
 For the FID for the application, lets set it to 3456.
 We have the default CMK, so DES (only 1 CMK key, so key No. 0) with a key of 0000000000000000
 
-Summary
-    AID:    123456
-    FID:    3456
-    CMK: No.0, type des, key 0000000000000000
+Summary  
+    AID:    123456  
+    FID:    3456  
+    CMK: No.0, type des, key 0000000000000000  
 
 That leaves us to define KS1 and KS2.
 KS1 and 2 define the how the application will be setup.  This can get complex, 
@@ -180,42 +180,42 @@ but if you take it step by step it should become clearer.
 
 Ket Set 1 contains how the application is dependent on the AMK (Application Master Key)
 It is 8 bits long. Where bit 0 is the least significant bit.
-
-       0:   Allow change master key
-       1:   Free Directory list access without master key
-            0: AMK auth needed for GetFileSettings and GetKeySettings
-            1: No AMK auth needed for GetFileIDs, GetISOFileIDs, GetFileSettings, GetKeySettings
-       2:   Free create/delete without master key
-            0:  CreateFile/DeleteFile only with AMK auth
-            1:  CreateFile/DeleteFile always
-       3:   Configuration changeable
-            0: Configuration frozen
-            1: Configuration changeable if authenticated with AMK (default)
-       4-7: Change Key Access Rights
-            0: Application master key needed (default)
-            0x1..0xD: Auth with specific key needed to change any key
-            0xE: Auth with the key to be changed (same KeyNo) is necessary to change a key
-            0xF: All Keys within this application are frozen
+```
+       0:   Allow change master key  
+       1:   Free Directory list access without master key  
+            0: AMK auth needed for GetFileSettings and GetKeySettings  
+            1: No AMK auth needed for GetFileIDs, GetISOFileIDs, GetFileSettings, GetKeySettings  
+       2:   Free create/delete without master key  
+            0:  CreateFile/DeleteFile only with AMK auth  
+            1:  CreateFile/DeleteFile always  
+       3:   Configuration changeable  
+            0: Configuration frozen  
+            1: Configuration changeable if authenticated with AMK (default)  
+       4-7: Change Key Access Rights  
+            0: Application master key needed (default)  
+            0x1..0xD: Auth with specific key needed to change any key  
+            0xE: Auth with the key to be changed (same KeyNo) is necessary to change a key  
+            0xF: All Keys within this application are frozen  
 
 Mapped out view
-        7 6 5 4                                     3                       2                                 1
-        0 0 0 0 - AMK needed to change Rights       0 - Config Frozen       0 Create/Del File only with AMK   0 - AMK needed for GetFile/Key Settings
-        0 0 0 1                                     1 - Config Not Frozen   1 Create/Del Any Key              1 - Any key GetFile/Key Settings
-         ....   - Auth with Key X to change Key
+        7 6 5 4                                     3                       2                                 1  
+        0 0 0 0 - AMK needed to change Rights       0 - Config Frozen       0 Create/Del File only with AMK   0 - AMK needed for GetFile/Key Settings  
+        0 0 0 1                                     1 - Config Not Frozen   1 Create/Del Any Key              1 - Any key GetFile/Key Settings  
+         ....   - Auth with Key X to change Key  
         1 1 0 1  
-        1 1 1 1 - All Keys Are frozen
+        1 1 1 1 - All Keys Are frozen  
 
-Bits 7..4 define what key and change what key.  In this example we will force all keys to be changed with the AMK, so (in binary)    0000----
-Bit 3 defines if we can change the configuration.  Lets allow future changes to the configuration, so                                ----1---
-Bit 2 defines if we need the AMK to create/delete files (or if anyone can create files, so let’s lock it down.                       -----0--
-Bit 1 defines if we need to use the AMK to find information about the application, lets make it easy to look this up by others.      ------1-
-Bit 0 defines if we are allowed to change the application master key,  lets be flexible and allow the AMK to be changed.             -------1
-
+Bits 7..4 define what key and change what key.  In this example we will force all keys to be changed with the AMK, so (in binary)    0000----  
+Bit 3 defines if we can change the configuration.  Lets allow future changes to the configuration, so                                ----1---  
+Bit 2 defines if we need the AMK to create/delete files (or if anyone can create files, so let’s lock it down.                       -----0--  
+Bit 1 defines if we need to use the AMK to find information about the application, lets make it easy to look this up by others.      ------1-  
+Bit 0 defines if we are allowed to change the application master key,  lets be flexible and allow the AMK to be changed.             -------1  
+```
 
 ### Bring it all together and we have KS1 value of : 0B Hex
 
 Moving onto KS2. 
-
+```
        0..3: Number of keys stored within the application (max. 14 keys)
        4:    RFU
        5:    Use of 2 byte ISO FID, 0: No, 1: Yes
@@ -230,10 +230,10 @@ Moving onto KS2.
        0 1  3K3Des     1 2 Byte FID
        0 0  Des/3Des
 
-Bits 7-6 define the encryption we wish to use. Lets go with AES                                    10------
-Bit 5 defines if we wish to use 2 byte File Identifications (FIDS), let use 2 byte FIDS            --1-----
-Bit 4 RFU                                                                                          ---0----
-Bit 3-0 defines how many keys we wish to use.  Lets keep it sime and have 1 + AMK, 2 keys.         ----0010
+Bits 7-6 define the encryption we wish to use. Lets go with AES                                    10------   
+Bit 5 defines if we wish to use 2 byte File Identifications (FIDS), let use 2 byte FIDS            --1-----  
+Bit 4 RFU                                                                                          ---0----  
+Bit 3-0 defines how many keys we wish to use.  Lets keep it sime and have 1 + AMK, 2 keys.         ----0010  
 
 ### Bring it all together and we have a KS2 of : A2 (hex)
 
@@ -243,7 +243,7 @@ Summary
     KS1:    0B
     KS2:    A2
     CMK: No.0, type des, key 0000000000000000
-    
+```
 Lest build and run the command to create this application on the proxmark3.
 ```
 hf mfdes createapp --aid 123456 --fid 3456 --ks1 0B --ks2 A2 -t des -n 0 -k 0000000000000000 
