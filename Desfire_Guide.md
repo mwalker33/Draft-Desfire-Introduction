@@ -72,12 +72,12 @@ Building and sending commands to a desfire card mostly involves 3 main things.
 - How will we exchange information (plain, encrypted, mac'ed etc)
 - What do we want to do (create, read, write etc)
 
-*** Note: not all modes support all options.  An incorrect or missing option can lead to the -20 error***
+***Note: not all modes support all options.  An incorrect or missing option can lead to the -20 error***
 
 While Application Identifiers (AID) need to be unique on a card, file 
 identifiers (FID) only need to be unique inside an application.
 
-*** Note: normal user files need to have the native FID must be between 0x00-0x1F***
+***Note: normal user files need to have the native FID must be between 0x00-0x1F***
 
 Desfire supports several versions of encryption. 
 - Native Des (8 byte keys)
@@ -88,7 +88,7 @@ Desfire supports several versions of encryption.
 
 As such commands should be sent using the same method.
 
-*** Note: Native Des is really Native 2KTDes with the 8 byte key repeated to form 16 bytes***
+***Note: Native Des is really Native 2KTDes with the 8 byte key repeated to form 16 bytes***
 
 Due to the many options and combination of ways a desfire application 
 can be setup, this document is not intended to cover them all; rather 
@@ -212,7 +212,7 @@ Bit 1 defines if we need to use the AMK to find information about the applicatio
 Bit 0 defines if we are allowed to change the application master key,  lets be flexible and allow the AMK to be changed.             -------1  
 ```
 
-*** Bring it all together and we have KS1 value of : 0B Hex***
+***Bring it all together and we have KS1 value of : 0B Hex***
 
 Moving onto KS2. 
 ```
@@ -235,7 +235,7 @@ Bit 5 defines if we wish to use 2 byte File Identifications (FIDS), let use 2 by
 Bit 4 RFU                                                                                          ---0----  
 Bit 3-0 defines how many keys we wish to use.  Lets keep it sime and have 1 + AMK, 2 keys.         ----0010  
 ```
-*** Bring it all together and we have a KS2 of : A2 (hex)***
+***Bring it all together and we have a KS2 of : A2 (hex)***
 ```
 Summary
     AID:    123456
@@ -333,7 +333,7 @@ result
 [+] Change key ok
 ```
 
-*** Note: there may be some special commands that can shorten the change key, see the online help for options.***
+***Note: there may be some special commands that can shorten the change key, see the online help for options.***
 
 Now that we have changed both keys, lets run some tests
 
@@ -423,8 +423,8 @@ Result
 [+] Standard data file 01 in the app 123456 created successfully
 ```
 
-*** Note: If you get an error, adding -av to a command can give more information that may help work out why it failed.***
-*** Normally if things look correct, a failure will be linked to a parameter not matching the application comms mode or out of range***
+***Note: If you get an error, adding -av to a command can give more information that may help work out why it failed.***
+***Normally if things look correct, a failure will be linked to a parameter not matching the application comms mode or out of range***
 
 Now that we have a file created, lets rerun the lsfiles to see what it reports
 
