@@ -386,7 +386,7 @@ to work it all out).
 - The rights (acl) we wish to assign to the file
 
 See the help file for the ways to provide these options and valid values.
-
+```
 For this example, I am going to use the long version for the ACL
 Information needed
 AID                 : 123456
@@ -401,7 +401,7 @@ Read Rights         : free   (anyone can read the file)
 Write Rights        : key0  (Must use Key 0 to write to the file)
 Read/Write Rights   : key0 
 Change Rights       : key0
-
+```
 
 ```
 hf mfdes createfile --aid 123456 -n 0 -t aes -k aabbccddeeff0099feedbeef12345678 -m mac --fid 01 --isofid 0001 --size 000010 --rrights free --wrights key0 --rwrights key0 --chrights key0
