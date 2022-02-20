@@ -25,7 +25,7 @@
 ## Introduction
 ^[Top](#top)
 
-Desfire is a generak purpose HF (High Frequency) RFID card that is used
+Desfire is a general purpose HF (High Frequency) RFID card that is used
 in the 13.56 Mhz frequency space. It can be a complex card to use due to
 the many options it supports, so we will use the proxmark3 rrg fork to 
 get a start on using its commands so configure a desfire card.  
@@ -38,7 +38,7 @@ to read the data sheets be near the top of the list. It can be very hard
 as the data sheet will hold the information you need, but you don’t yet
 know what it means.  A lot of the detailed datasheets for Desfire is not 
 available to the general public, as a result this guide is based on what 
-was public and expermenting with the proxmark3 desfire commands.
+was public and experimenting with the proxmark3 desfire commands.
 
 This guide is not a how do I clone document. It is meant to help people
 learn how to use Desfire and in the process learn about rfid and the
@@ -48,21 +48,22 @@ Throughout this guide I will give examples. It is recommended that you
 try these as we go. To do so, have a blank Desfire (ev1 or later) card 
 that you can use for this purpose.
 
+
 ## Desfire overview
 ^[Top](#top)
 
-Most LF cards had a fairly simple read only setup; When powered on, it 
+MMost LF cards had a fairly simple read only setup; when powered on, it 
 will send its programed ID modulated and encoded as needed so the readers 
 as per design.  There were some general purpose cards like the EM4x05 and 
-T55xx that has user accessable blocks to read and write data as needed.
+T55xx that has user accessible blocks to read and write data as needed.
 As we move into HF it is more common for cards to be read/write cards.  A 
-common card is the Mifare Classic.  These cards have impoved security 
+common card is the Mifare Classic.  These cards have improved security 
 (over LF) and tend to still have a block structure. (i.e. Data is 
-read/writting block by block).  Over time things are improved and new 
+read/writing block by block).  Over time things are improved and new 
 generation cards are developed and released, Desfire is an example.
 
 Desfire is not broken in blocks and sectors, rather it is more like a 
-directoy and file stucture (where a Application can be thought of as the 
+directory and file structure (where a Application can be thought of as the 
 directly, and the files inside that Application can be thought of as files 
 in the directory.
 
@@ -73,7 +74,7 @@ Building and sending commands to a desfire card mostly involves 3 main things.
 
 ### Note: not all modes support all options.  An incorrect or missing option can lead to the -20 error
 
-While Application Identifiers (AID) need to be uniqure on a card, file 
+While Application Identifiers (AID) need to be unique on a card, file 
 identifiers (FID) only need to be unique inside an application.
 
 ### Note: normal user files need to have the native FID must be between 0x00-0x1F
@@ -101,7 +102,7 @@ A good place to start to see what is on you card is using the 'hf mfdes info' co
 ```
 [usb] pm3 --> hf mfdes info
 ```
-For a blacnk card, you should see something simular to the following.
+For a blank card, you should see something similar to the following.
 Please note actual data like UID, Batch number etc will vary as expected.
 ```
 [=] ---------------------------------- Tag Information ----------------------------------
@@ -148,7 +149,7 @@ Please note actual data like UID, Batch number etc will vary as expected.
 [=] Standalone DESFire
 ```
 What we can see is the Card Master Key Application (CMK) overview.
-This card in its default state can support severy auth methods.
+This card in its default state can support several authentication methods.
 It also shows "Application Count: 0", so no user applications yet and 
 2304 bytes free memory, so looks like a 2K Desfire EV1 card.
 We will cover looking at an application setup later in this guide.
@@ -156,7 +157,7 @@ We will cover looking at an application setup later in this guide.
 ## Create an application
 ^[Top](#top)
 
-Their is a few peices of information we need to know and define before
+There is a few pieces of information we need to know and define before
 we can create an application.
 - AID : The application identifier we wish to use (unique per application) 3 bytes
 - FID : The applications File Identifier - 2 Bytes
@@ -166,7 +167,7 @@ we can create an application.
 
 For this example we will use an AID of 123456 (my first App, but does not need to start at 1)
 For the FID for the application, lets set it to 3456.
-We have the defaul CMK, so DES (only 1 CMK key, so key No. 0) with a key of 0000000000000000
+We have the default CMK, so DES (only 1 CMK key, so key No. 0) with a key of 0000000000000000
 
 Summary
     AID:    123456
@@ -175,10 +176,10 @@ Summary
 
 That leaves us to define KS1 and KS2.
 KS1 and 2 define the how the application will be setup.  This can get complex, 
-but if you take it step by step it should be come clearer.
+but if you take it step by step it should become clearer.
 
-Ket Set 1 contains how the application is depentent on the AMK (Application Master Key)
-It is 8 bits long. Where bit 0 is the least signifent bit.
+Ket Set 1 contains how the application is dependent on the AMK (Application Master Key)
+It is 8 bits long. Where bit 0 is the least significant bit.
 
        0:   Allow change master key
        1:   Free Directory list access without master key
@@ -187,10 +188,10 @@ It is 8 bits long. Where bit 0 is the least signifent bit.
        2:   Free create/delete without master key
             0:  CreateFile/DeleteFile only with AMK auth
             1:  CreateFile/DeleteFile always
-       3:   Configuration changable
+       3:   Configuration changeable
             0: Configuration frozen
-            1: Configuration changable if authenticated with AMK (default)
-       4-7: ChangeKey Access Rights
+            1: Configuration changeable if authenticated with AMK (default)
+       4-7: Change Key Access Rights
             0: Application master key needed (default)
             0x1..0xD: Auth with specific key needed to change any key
             0xE: Auth with the key to be changed (same KeyNo) is necessary to change a key
@@ -202,13 +203,14 @@ Mapped out view
         0 0 0 1                                     1 - Config Not Frozen   1 Create/Del Any Key              1 - Any key GetFile/Key Settings
          ....   - Auth with Key X to change Key
         1 1 0 1  
-        1 1 1 1 - All Keys Are frozed
+        1 1 1 1 - All Keys Are frozen
 
-Bits 7..4 define what key and change what key.  In this example we will force all keys to be changed with the AMK, so (in binary) 0000----
-Bit 3 defines if we can change the config.  Lets allow future changes to the config, so                                           ----1---
-Bit 2 defines if we need the AMK to create/delete files (or if anyone can create files, so lets lock it down.                     -----0--
-Bit 1 defines if we need to use the AMK to find information about the application, lets make it easy to look this up by others.   ------1-
-Bit 0 defines if we are allowed to change the application master key,  lets be flexable and allow the AMK to be changed.          -------1
+Bits 7..4 define what key and change what key.  In this example we will force all keys to be changed with the AMK, so (in binary)    0000----
+Bit 3 defines if we can change the configuration.  Lets allow future changes to the configuration, so                                ----1---
+Bit 2 defines if we need the AMK to create/delete files (or if anyone can create files, so let’s lock it down.                       -----0--
+Bit 1 defines if we need to use the AMK to find information about the application, lets make it easy to look this up by others.      ------1-
+Bit 0 defines if we are allowed to change the application master key,  lets be flexible and allow the AMK to be changed.             -------1
+
 
 ### Bring it all together and we have KS1 value of : 0B Hex
 
@@ -287,7 +289,7 @@ And that found 2 applications, the PICC Level Application and the one we just cr
 [+]
 [+] Key versions [0..1]:  00, 00
 ```
-We can see it supports AES Auth, has 2 keys the Correct AID and FID we set and everything looks good so far.
+We can see it supports AES Auth, has 2 keys the correct AID and FID we set and everything looks good so far.
 
 ## Change an application key
 ^[Top](#top)
@@ -301,7 +303,7 @@ In order to change an application key we need to know a few things.
 
 Lets change Key 1 from 00000000000000000000000000000000 to 11223344556677889900112233445566
 We will use Key 0 with key 00000000000000000000000000000000 to perform this action (inline with the Application Setup.
-Since this is an AES Applcaition, we will set the crypt type to AES
+Since this is an AES Application, we will set the crypt type to AES
 ```
 hf mfdes changekey --aid 123456 -t aes -n 0 --key 00000000000000000000000000000000 --newkeyno 1 -oldkey 00000000000000000000000000000000 --newkey 11223344556677889900112233445566
 ```
@@ -316,7 +318,7 @@ All going well, we should get a positive response
 [+] Change key ok
 ```
 
-Now let change key 0 to aabbccddeeff0099feedbeef12345678
+Now let's change key 0 to aabbccddeeff0099feedbeef12345678
 ```
 hf mfdes changekey --aid 123456 -t aes -n 0 --key 00000000000000000000000000000000 --newkeyno 0 --oldkey 00000000000000000000000000000000 --newkey aabbccddeeff0099feedbeef12345678
 ```
@@ -362,13 +364,12 @@ Test 4 - Using the correct key 1 with lsfiles
 ```
 
 As can be seen from the above command, when we used the wrong keys, it failed as expected.
-We we used the correct key the command succeded (who reported no files in the AID).
-
+We used the correct key the command succeed (who reported no files in the AID).
 
 ## Create a file
 ^[Top](#top)
 
-Defire supports several file types (e.g. Standard (data) file, Value file, Record file and so on.
+Desfire supports several file types (e.g. Standard (data) file, Value file, Record file and so on.
 Each file type has a purpose.  For this example we are going to create a standard data file.
 
 In order to create a file we need to know a few things.  These can change with the type of file 
@@ -390,7 +391,7 @@ For this example, I am going to use the long version for the ACL
 Information needed
 AID                 : 123456
 Key to use          : 0
-Encyprion           : AES
+Encryption          : AES
 Key                 : aabbccddeeff0099feedbeef12345678
 Communication mode  : mac
 FID                 : 1
@@ -400,6 +401,7 @@ Read Rights         : free   (anyone can read the file)
 Write Rights        : key0  (Must use Key 0 to write to the file)
 Read/Write Rights   : key0 
 Change Rights       : key0
+
 
 ```
 hf mfdes createfile --aid 123456 -n 0 -t aes -k aabbccddeeff0099feedbeef12345678 -m mac --fid 01 --isofid 0001 --size 000010 --rrights free --wrights key0 --rwrights key0 --chrights key0
@@ -422,9 +424,9 @@ Result
 ```
 
 ### Note: If you get an error, adding -av to a command can give more information that may help work out why it failed.
-### Normally if things look correct, a failure will be linked to a paramater not matching the applicaiton comms mode or out of range
+### Normally if things look correct, a failure will be linked to a parameter not matching the application comms mode or out of range
 
-Now that we have a file create, lets rerun the lsfiles to see what it reports
+Now that we have a file created, lets rerun the lsfiles to see what it reports
 
 ```
 [usb] pm3 --> hf mfdes lsfiles --aid 123456 -t aes -n 0 -k aabbccddeeff0099feedbeef12345678
@@ -445,9 +447,10 @@ With different options like --offset and --length we can read just part of a fil
 By new you should feel a theme of collecting the information needed and the values we are using in these examples.
 Lets go with the simple command for reading a standard file using key 0
 - AID           : 123456
-- Encyprion     : aes
+- Encryption    : aes
 - Key Number    : 0
 - Key           : aabbccddeeff0099feedbeef12345678
+
 ```
 hf mfdes read --aid 123456 -t aes -n 0 -k aabbccddeeff0099feedbeef12345678 --fid 01
 ```
@@ -463,12 +466,12 @@ Result
 ## Read a file
 ^[Top](#top)
 
-By this stage we now have an appliction created, changed its keys, created a standard file, now
+By this stage we now have an application created, changed its keys, created a standard file, now
 we can write data into that file.
 
 Information needed
 - AID           : 123456
-- Encyprion     : aes
+- Encryption    : aes
 - Key Number    : 0
 - Key           : aabbccddeeff0099feedbeef12345678
 - type of file  : data
@@ -483,7 +486,7 @@ result
 [=] Write data file 01 success
 ```
 
-Now lets read that back
+Now let's read that back
 ```
 [usb] pm3 --> hf mfdes read --aid 123456 -t aes -n 0 -k aabbccddeeff0099feedbeef12345678 --fid 01
 [=] ------------------------------- File 01 data -------------------------------
@@ -493,7 +496,7 @@ Now lets read that back
 [=]   0/0x00 | 00 11 22 33 44 55 66 77 88 99 AA BB CC DD EE FF | .."3DUfw........
 ```
 
-Now that we have some identifable data, lets try to read 7 bytes from the middle
+Now that we have some identifiable data, let’s try to read 2 bytes from the middle offset 7
 ```
 [usb] pm3 --> hf mfdes read --aid 123456 -t aes -n 0 -k aabbccddeeff0099feedbeef12345678 --fid 01 -o 000007 -l 000002
 [=] ------------------------------- File 01 data -------------------------------
@@ -503,7 +506,7 @@ Now that we have some identifable data, lets try to read 7 bytes from the middle
 [=]   7/0x07 | 77 88                                           | w.
 ```
 
-Next, lets change those two bytes to AA BB
+Next, let's change those two bytes to AA BB
 ```
 [usb] pm3 --> hf mfdes write --aid 123456 -t aes -n 0 -k aabbccddeeff0099feedbeef12345678 --fid 01 -m plain --type data -o 000007 -d AABB
 [=] Write data file 01 success
@@ -517,7 +520,7 @@ and verify with a read
 [=] ----------------------------------------------------------------------------
 [=]   7/0x07 | AA BB                                           | ..
 ```
-of read the entire file and see the changes in context.
+or read the entire file and see the changes in context.
 ```
 [usb] pm3 --> hf mfdes read --aid 123456 -t aes -n 0 -k aabbccddeeff0099feedbeef12345678  --fid 01
 [=] ------------------------------- File 01 data -------------------------------
