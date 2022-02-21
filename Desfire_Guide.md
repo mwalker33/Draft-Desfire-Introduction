@@ -205,6 +205,7 @@ Mapped out view
         1 1 0 1  
         1 1 1 1 - All Keys Are frozen  
 
+Example  
 Bits 7..4 define what key and change what key.  In this example we will force all keys to be changed with the AMK, so (in binary)    0000----  
 Bit 3 defines if we can change the configuration.  Lets allow future changes to the configuration, so                                ----1---  
 Bit 2 defines if we need the AMK to create/delete files (or if anyone can create files, so let’s lock it down.                       -----0--  
@@ -244,7 +245,7 @@ Summary
     KS2:    A2
     CMK: No.0, type des, key 0000000000000000
 ```
-Lest build and run the command to create this application on the proxmark3.
+Lets build and run the command to create this application on the proxmark3.
 ```
 hf mfdes createapp --aid 123456 --fid 3456 --ks1 0B --ks2 A2 -t des -n 0 -k 0000000000000000 
 ```
@@ -385,6 +386,8 @@ to work it all out).
 - The size of the file (in hex 3 bytes)
 - The rights (acl) we wish to assign to the file
 
+***note: --amode sets the encrypt, mac or plain file access mode (the following examples are using plain mode)***
+
 See the help file for the ways to provide these options and valid values.
 ```
 For this example, I am going to use the long version for the ACL
@@ -404,7 +407,7 @@ Change Rights       : key0
 ```
 
 ```
-hf mfdes createfile --aid 123456 -n 0 -t aes -k aabbccddeeff0099feedbeef12345678 -m mac --fid 01 --isofid 0001 --size 000010 --rrights free --wrights key0 --rwrights key0 --chrights key0
+hf mfdes createfile --aid 123456 -n 0 -t aes -k aabbccddeeff0099feedbeef12345678 -m mac --fid 01 --isofid 0001 --amode plain --size 000010 --rrights free --wrights key0 --rwrights key0 --chrights key0
 ```
 Result
 ```
