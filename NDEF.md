@@ -6,10 +6,10 @@
 - [Notes on Setting up NDEF](#Notes-on-Setting-up-NDEF)
 - [Table of Contents](#table-of-contents)
   - [NDEF on Desfire EV1](#NDEF-on-Desfire-EV1)
-    - [Step 1 - Create Application](#Step-1-Create-Application)
-    - [Step 2 - Create the Capability Container file (CC File)](#Step-2-Create-the-Capability-Container-file-CC-File)
-    - [Step 3 - Create the NDEF Record File](#Step-3-Create-the-NDEF-Record-File)
-    - [Step 4 - Check the NDEF Record works](#Step-4-Check-the-NDEF-Record-works)
+    - [Step 1. Create Application](#Step-1-Create-Application)
+    - [Step 2. Create the Capability Container file (CC File)](#Step-2-Create-the-Capability-Container-file-CC-File)
+    - [Step 3. Create the NDEF Record File](#Step-3-Create-the-NDEF-Record-File)
+    - [Step 4. Check the NDEF Record works](#Step-4-Check-the-NDEF-Record-works)
 
 ## NDEF on Desfire EV1
 ^[Top](#top)
@@ -26,7 +26,7 @@ The follow notes are based on:
 In order to setup NDEF on a Mifare Desfire card you need to create an Application and two files inside that application.
 The application and files have some special needs in order for the standands to work and the NDEF recrod to be found.
 
-### Step 1 - Create Application
+### Step 1 Create Application
 
 While what i beleive the App ID and File IDs dont matter (for EV1 and later)
 I did find a reference to using the values in this example.
@@ -47,7 +47,7 @@ Note: That is the hex/binary data that needs to be stored!
 Result  
 ```    [+] Desfire application 000001 successfully created```
 
-### Step 2 - Create the Capability Container file (CC File)
+### Step 2 Create the Capability Container file (CC File)
 
 The CC File is a standard file to store the needed NDEF information to find your NDEF records.  This example will contrain the setup for a single NDEF record.
 Note: You can define more then one NDEF data file if needed (not covered in this example)
@@ -119,7 +119,7 @@ Result
     [=]   0/0x00 | 00 0F 20 00 3B 00 34 04 06 E1 04 00 FF 00 FF    | .. .;.4........
 
 
-### Step 3 - Create the NDEF Record File
+### Step 3 Create the NDEF Record File
 
 
     Type            : Standard data file
@@ -176,7 +176,7 @@ Result:
     [=] Write data file 02 success
 
 
-### Step 4 - Check the NDEF Record works
+### Step 4 Check the NDEF Record works
 
 You can use any NDEF reading tool or device to check.  If this card is presented to a mobile phone, it should visit the nxp.com web page.
 
