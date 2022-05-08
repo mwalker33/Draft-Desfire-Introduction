@@ -1,9 +1,9 @@
-# Notes on Setting up NDEF 
+# Notes on Setting up NDEF (NDEF type4a)
 <a id="Top"></a>
 
 # Table of Contents
 
-- [Notes on Setting up NDEF](#Notes-on-Setting-up-NDEF)
+- [Notes on Setting up NDEF type4a](#Notes-on-Setting-up-NDEF)
 - [Table of Contents](#table-of-contents)
   - [NDEF on Desfire EV1](#NDEF-on-Desfire-EV1)
     - [Step 1. Create Application](#Step-1-Create-Application)
@@ -11,7 +11,7 @@
     - [Step 3. Create the NDEF Record File](#Step-3-Create-the-NDEF-Record-File)
   - [Check the NDEF Record works](#Check-the-NDEF-Record-works)
 
-## NDEF on Desfire EV1
+## NDEF type4a on Desfire EV1
 ^[Top](#top)
 
 The follow is a guide to assist in setting up a single NDEF record on an Desfire EV1 (or later).
