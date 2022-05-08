@@ -38,8 +38,11 @@ Note: That is the hex/binary data that needs to be stored!
     Encryption      : AES                       <- Any encryption.  
     ISO 2 Byte FID  : Yes                       <- **Important MUST support 2 Byte ISO File IDs**  
 
+***Proxmark Command***  
+```    hf mfdes createapp --aid 000001 --fid E110 --ks1 0B --ks2 A1 --dfhex D2760000850101 -t des -n 0 -k 0000000000000000```
 
-
+Result  
+```    [+] Desfire application 000001 successfully created```
 
 ### Step 2 - Create the Capability Container file (CC File)
 
@@ -70,6 +73,48 @@ Usefull Items in the CC File
 
     Note: the NDEF Record File Size should be <= the actual data file size and >= the amount of data you have. Its not how long the actual NDEF record is.
 
+***Proxmark Commands***  
+
+Create the CC File  
+
+    hf mfdes createfile --aid 000001 --fid 01 --isofid E103 --amode plain --size 00000F --rrights free --wrights key0 --rwrights key0 --chrights key0 -n 0 -t aes -k 00000000000000000000000000000000 -m plain  
+
+Result:  
+
+    [=] ---- Create file settings ----
+    [+] File type        : Standard data
+    [+] File number      : 0x01 (1)
+    [+] File ISO number  : 0xe103
+    [+] File comm mode   : Plain
+    [+] Additional access: No
+    [+] Access rights    : e000
+    [+] read     : free
+    [+] write    : key 0x00
+    [+] readwrite: key 0x00
+    [+] change   : key 0x00
+    [=] File size        : 15 (0xF) bytes
+    [+] Standard data file 01 in the app 000001 created successfully
+
+Write the CC Record to the file  
+
+    hf mfdes write --aid 000001 --fid 01 -d 000F20003B00340406E10400FF00FF -n 0 -t aes -k 00000000000000000000000000000000 -m plain
+
+Result  
+
+    [=] Write data file 01 success
+
+Check the contents of the CC file (note: no-auth was selected to ensure we can read without authentication as needed)  
+
+    hf mfdes read --no-auth --aid 000001 --fid 01
+
+Result  
+
+    [=] ------------------------------- File 01 data -------------------------------
+    [+] Read 15 bytes from file 0x01 offset 0
+    [=]  Offset  | Data                                            | Ascii
+    [=] ----------------------------------------------------------------------------
+    [=]   0/0x00 | 00 0F 20 00 3B 00 34 04 06 E1 04 00 FF 00 FF    | .. .;.4........
+
 
 ### Step 3 - Create the NDEF Record File
 
@@ -97,3 +142,110 @@ Usefull Items in this NDEF example record
       |           ----------------------- ASCII U - URI
        ---------------------------------- Lenght of the NDEF record (not inluding the trailing FE
 
+***Proxmark Commands***
+
+Create the NDEF record file  
+
+    hf mfdes createfile --aid 000001 --fid 02 --isofid E104 --amode plain --size 0000FF --rrights free --wrights key0 --rwrights key0 --chrights key0 -n 0 -t aes -k 00000000000000000000000000000000 -m plain
+
+Result:  
+
+    [=] ---- Create file settings ----
+    [+] File type        : Standard data
+    [+] File number      : 0x02 (2)
+    [+] File ISO number  : 0xe104
+    [+] File comm mode   : Plain
+    [+] Additional access: No
+    [+] Access rights    : e000
+    [+] read     : free
+    [+] write    : key 0x00
+    [+] readwrite: key 0x00
+    [+] change   : key 0x00
+    [=] File size        : 255 (0xFF) bytes
+    [+] Standard data file 02 in the app 000001 created successfully
+
+Write an NDEF record to the file  
+
+    hf mfdes write --aid 000001 --fid 02 -d 000CD1010855016E78702E636F6DFE -n 0 -t aes -k 00000000000000000000000000000000 -m plain
+
+Result:  
+
+    [=] Write data file 02 success
+
+Check the contents of the NDEF record file  
+
+    hf mfdes read --no-auth --aid 000001 --fid 02
+
+Result:  
+
+    [=] ------------------------------- File 02 data -------------------------------
+    [+] Read 255 bytes from file 0x02 offset 0
+    [=]  Offset  | Data                                            | Ascii
+    [=] ----------------------------------------------------------------------------
+    [=]   0/0x00 | 00 0C D1 01 08 55 01 6E 78 70 2E 63 6F 6D FE 00 | .....U.nxp.com..
+    [=]  16/0x10 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+    [=]  32/0x20 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+    [=]  48/0x30 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+    [=]  64/0x40 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+    [=]  80/0x50 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+    [=]  96/0x60 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+    [=] 112/0x70 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+    [=] 128/0x80 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+    [=] 144/0x90 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+    [=] 160/0xA0 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+    [=] 176/0xB0 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+    [=] 192/0xC0 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+    [=] 208/0xD0 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+    [=] 224/0xE0 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+    [=] 240/0xF0 | 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00    | ...............
+
+Check if the NDEF record can be read correctly
+
+    nfc type4a read
+
+Result:  
+
+    [+] ------------ Capability Container file ------------
+    [+]  Version... v2.0 ( 0x20 )
+    [+]  Len....... 15 bytes ( 0x0F )
+    [+]  Max bytes read  59 bytes ( 0x003B )
+    [+]  Max bytes write 52 bytes ( 0x0034 )
+    
+    [+]  NDEF file control TLV
+    [+]     (t) type of file.... 04
+    [+]     (v) ................ 06
+    [+]     file id............. E104
+    [+]     Max NDEF filesize... 255 bytes ( 0x00FF )
+    [+]     Access rights
+    [+]     read   ( 00 ) protection: disabled
+    [+]     write  ( FF ) protection: enabled
+    [+]
+    [+] ----------------- raw -----------------
+    [+] 000F20003B00340406E10400FF00FF
+    
+    
+    [+] Record 1
+    [=] -----------------------------------------------------
+    [=] Header info
+    [+]   1 ....... Message begin
+    [+]    1 ...... Message end
+    [+]     0 ..... Chunk flag
+    [+]      1 .... Short record bit
+    [+]       0 ... ID Len present
+    [+]
+    [+]  Header length...... 3
+    [+]  Type length........ 1
+    [+]  Payload length..... 8
+    [+]  ID length.......... 0
+    [+]  Record length...... 12
+    [+]  Type name format... [ 0x01 ] Well Known Record
+    [=]
+    [=] Payload info
+    [=] Type data
+    [=]     00: 55                                              | U
+    [=] Payload data
+    [=]     00: 01 6E 78 70 2E 63 6F 6D                         | .nxp.com
+    [=]
+    [=] URL
+    [=]     uri... http://www.nxp.com
+    [=]
