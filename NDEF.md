@@ -6,7 +6,10 @@
 - [Notes on Setting up NDEF](#Notes-on-Setting-up-NDEF)
 - [Table of Contents](#table-of-contents)
   - [NDEF on Desfire EV1](#NDEF-on-Desfire-EV1)
-
+    - [Step 1 - Create Application]
+    - [Step 2 - Create the Capability Container file (CC File)]
+    - [Step 3 - Create the NDEF Record File]
+    - [Step 4 - Check the NDEF Record works]
 
 ## NDEF on Desfire EV1
 ^[Top](#top)
@@ -52,7 +55,7 @@ Note: You can define more then one NDEF data file if needed (not covered in this
     Type            : Standard data file
     FID             : 01                        <- File ID can be any uniqure File ID for this AID
     ISO FID         : E103                      <- **Important MUST be the 2 byte ISO File of E103**
-    Size            : 0F (15 bytes)           <- May need to be longer in more advanced setups.
+    Size            : 0F (15 bytes)             <- May need to be longer in more advanced setups.
     Comms           : Plain                     <- **Important the file MUST support plain communication mode**
     Permissions     : E000                      <- **Read Free** write change etc key 0)  
                                                     Note: To allow public update set Write to E as well.
@@ -171,6 +174,13 @@ Write an NDEF record to the file
 Result:  
 
     [=] Write data file 02 success
+
+
+### Step 4 - Check the NDEF Record works
+
+You can use any NDEF reading tool or device to check.  If this card is presented to a mobile phone, it should visit the nxp.com web page.
+
+***Proxmark Command***  
 
 Check the contents of the NDEF record file  
 
