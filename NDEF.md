@@ -9,7 +9,7 @@
     - [Step 1. Create Application](#Step-1-Create-Application)
     - [Step 2. Create the Capability Container file (CC File)](#Step-2-Create-the-Capability-Container-file-CC-File)
     - [Step 3. Create the NDEF Record File](#Step-3-Create-the-NDEF-Record-File)
-    - [Step 4. Check the NDEF Record works](#Step-4-Check-the-NDEF-Record-works)
+  - [Check the NDEF Record works](#Check-the-NDEF-Record-works)
 
 ## NDEF on Desfire EV1
 ^[Top](#top)
@@ -176,7 +176,7 @@ Result:
     [=] Write data file 02 success
 
 
-### Step 4 Check the NDEF Record works
+## Check the NDEF Record works
 
 You can use any NDEF reading tool or device to check.  If this card is presented to a mobile phone, it should visit the nxp.com web page.
 
