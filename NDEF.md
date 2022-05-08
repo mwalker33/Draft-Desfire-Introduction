@@ -6,10 +6,10 @@
 - [Notes on Setting up NDEF](#Notes-on-Setting-up-NDEF)
 - [Table of Contents](#table-of-contents)
   - [NDEF on Desfire EV1](#NDEF-on-Desfire-EV1)
-    - [Step 1 - Create Application]
-    - [Step 2 - Create the Capability Container file (CC File)]
-    - [Step 3 - Create the NDEF Record File]
-    - [Step 4 - Check the NDEF Record works]
+    - [Step 1 - Create Application](#Step-1-Create-Application)
+    - [Step 2 - Create the Capability Container file (CC File)](#Step-2-Create-the-Capability-Container-file-CC-File)
+    - [Step 3 - Create the NDEF Record File](#Step-3-Create-the-NDEF-Record-File)
+    - [Step 4 - Check the NDEF Record works](#Step-4-Check-the-NDEF-Record-works)
 
 ## NDEF on Desfire EV1
 ^[Top](#top)
