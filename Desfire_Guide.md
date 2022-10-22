@@ -306,7 +306,7 @@ Lets change Key 1 from 00000000000000000000000000000000 to 112233445566778899001
 We will use Key 0 with key 00000000000000000000000000000000 to perform this action (inline with the Application Setup.
 Since this is an AES Application, we will set the crypt type to AES
 ```
-hf mfdes changekey --aid 123456 -t aes -n 0 --key 00000000000000000000000000000000 --newkeyno 1 -oldkey 00000000000000000000000000000000 --newkey 11223344556677889900112233445566
+hf mfdes changekey --aid 123456 -t aes -n 0 --key 00000000000000000000000000000000 --newkeyno 1 --oldkey 00000000000000000000000000000000 --newkey 11223344556677889900112233445566
 ```
 All going well, we should get a positive response
 ```
